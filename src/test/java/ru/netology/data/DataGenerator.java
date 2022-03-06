@@ -17,7 +17,9 @@ import static io.restassured.RestAssured.given;
 @Data
 @Getter
 
+
 public class DataGenerator {
+    private static final Faker faker = new Faker(new Locale("en"));
     private static final RequestSpecification requestSpec = new RequestSpecBuilder()
             .setBaseUri("http://localhost")
             .setPort(9999)
@@ -25,7 +27,6 @@ public class DataGenerator {
             .setContentType(ContentType.JSON)
             .log(LogDetail.ALL)
             .build();
-    private static final Faker faker = new Faker(new Locale("en"));
 
     private DataGenerator() {
     }
@@ -33,30 +34,6 @@ public class DataGenerator {
     private static class User {
         public static final String userName = faker.name().username();
         public static final String password = faker.internet().password();
-    }
-
-    private static void ActiveRegistration() {
-        // TODO: отправить запрос на указанный в требованиях path, передав в body запроса объект user
-        //  и не забудьте передать подготовленную спецификацию requestSpec.
-        //  Пример реализации метода показан в условии к задаче.
-        given()
-                .spec(requestSpec)
-                .body(new Gson().toJson(new RegistrationDto(User.userName, User.password, "active")))
-                .when() // "когда"
-                .post("/api/system/users")
-                .then()
-                .statusCode(200);
-
-    }
-
-    private static void NonActiveRegistration() {
-        given()
-                .spec(requestSpec)
-                .body(new Gson().toJson(new RegistrationDto(User.userName, User.password, "blocked")))
-                .when() // "когда"
-                .post("/api/system/users")
-                .then()
-                .statusCode(200);
     }
 
     public static String getRandomLogin() {
@@ -76,12 +53,23 @@ public class DataGenerator {
             return new RegistrationDto(getRandomLogin(), getRandomPassword(), "active");
         }
 
-       /* public static RegistrationDto getRegisteredUser(String status) {
+        public static RegistrationDto getRegisteredUser(String status) {
             // TODO: объявить переменную registeredUser и присвоить ей значение возвращённое getUser(status).
             // Послать запрос на регистрацию пользователя с помощью вызова sendRequest(registeredUser)
-
+            var registeredUser = getUser(status);
+            sendRequest(registeredUser);
             return registeredUser;
-        }*/
+        }
+
+        public static void sendRequest(RegistrationDto registeredUser) {
+            given()
+                    .spec(requestSpec)
+                    .body(new Gson().toJson(new RegistrationDto(User.userName, User.password, "blocked")))
+                    .when()
+                    .post("/api/system/users")
+                    .then()
+                    .statusCode(200);
+        }
     }
 
     @Value
