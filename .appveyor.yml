@@ -9,7 +9,7 @@ branches:
 build: off
 
 install:
-  - java -jar ./artifacts/app-card-delivery.jar &
+ - java -jar ./artifacts/app-ibank.jar -P:profile=test &
 
 build_script:
   - chmod +x gradlew
