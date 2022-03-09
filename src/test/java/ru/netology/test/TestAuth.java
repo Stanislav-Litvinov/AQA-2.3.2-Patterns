@@ -16,6 +16,8 @@ public class TestAuth {
     @BeforeEach
     void setup() {
         Configuration.holdBrowserOpen = true;
+        Configuration.browser = "chrome";
+        System.setProperty("selenide.browser", "chrome");
         open("http://localhost:9999");
     }
 
