@@ -15,7 +15,6 @@ import static ru.netology.data.DataGenerator.getRandomPassword;
 public class TestAuth {
     @BeforeEach
     void setup() {
-        WebDriverManager.chromedriver().driverVersion("99.0.4844.51").setup();
         Configuration.browser = "chrome";
         Configuration.holdBrowserOpen = true;
         open("http://localhost:9999");
